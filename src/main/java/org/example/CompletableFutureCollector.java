@@ -9,14 +9,15 @@ import java.util.stream.Collectors;
 public class CompletableFutureCollector {
 
   /**
-   * Transforms a <pre>{@code List<CompletableFuture<T>>}</pre> into a <pre>{@code CompletableFuture<List<T>>}</pre>
+   * Collect CompletableFuture and
+   * Transforms it from a <pre>{@code List<CompletableFuture<T>>}</pre> into a <pre>{@code CompletableFuture<List<T>>}</pre>
    *
    * @param <X> the computed result type
    * @param <T> some CompletableFuture
    * @return a CompletableFuture of <pre>{@code CompletableFuture<List<T>>}</pre> that is complete when all collected
    * CompletableFutures are complete.
    */
-  public static <X, T extends CompletableFuture<X>> Collector<T, ?, CompletableFuture<List<X>>> collectResult() {
+  public static <X, T extends CompletableFuture<X>> Collector<T, ?, CompletableFuture<List<X>>> collectAndTransform() {
     return Collectors.collectingAndThen(Collectors.toList(), joinResult());
   }
 

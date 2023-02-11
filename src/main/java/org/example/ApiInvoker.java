@@ -20,8 +20,9 @@ public class ApiInvoker {
     var responseFutures = requests.stream()
         .map(this::sendRequest)
         .collect(toList());
-    return responseFutures.stream()
-        .collect(CompletableFutureCollector.collectResult());
+    var resultList = responseFutures.stream()
+            .collect(CompletableFutureCollector.collectAndTransform());
+    return resultList;
   }
 
   private CompletableFuture<HttpResponse<String>> sendRequest(HttpRequest request) {
