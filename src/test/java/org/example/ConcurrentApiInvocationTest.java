@@ -42,6 +42,7 @@ public class ConcurrentApiInvocationTest {
 
   @Test
   void invokeApis_sequentially() {
+    System.out.println("call multiple APIs synchronously");
     System.out.println("===== start time: " + java.time.LocalTime.now());
 
     var requests = getHttpRequests();
@@ -55,6 +56,7 @@ public class ConcurrentApiInvocationTest {
 
   @Test
   void invokeApis_concurrently() {
+    System.out.println("call multiple APIs asynchronously with CompletableFuture");
     System.out.println("===== start time: " + java.time.LocalTime.now());
 
     var requests = getHttpRequests();
@@ -71,7 +73,7 @@ public class ConcurrentApiInvocationTest {
     for (int i = 0; i < 3; i++)
       requests.add(
           HttpRequest.newBuilder()
-              .uri(URI.create(String.format("http://localhost:%d/test%d", mockServerPort, i)))
+              .uri(URI.create(String.format("http://localhost:%d/api%d", mockServerPort, i)))
               .GET()
               .build()
       );
@@ -84,12 +86,12 @@ public class ConcurrentApiInvocationTest {
           .when(
               request()
                   .withMethod("GET")
-                  .withPath("/test" + i))
+                  .withPath("/api" + i))
           .respond(
               response()
                   .withStatusCode(200)
                   .withDelay(Delay.milliseconds(1000))
-                  .withBody(String.format("{message: 'hello world! from endpoint test%d'}", i))
+                  .withBody(String.format("{message: 'hello world! from endpoint api%d'}", i))
           );
     }
     mockServerPort = clientAndServer.getPort();
